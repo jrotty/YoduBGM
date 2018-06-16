@@ -4,7 +4,7 @@
  * 
  * @package YoduBGM
  * @author Jrotty
- * @version 1.0.0
+ * @version 1.5.0
  * @link http://qqdie.com/archives/typecho-yodubgm.html
  */
 class YoduBGM_Plugin implements Typecho_Plugin_Interface
@@ -27,8 +27,17 @@ $sxj = new Typecho_Widget_Helper_Form_Element_Radio(
             '');
         $form->addInput($sxj);
         $musicList = new Typecho_Widget_Helper_Form_Element_Textarea('musicList', NULL, 
-'{title:"明日への扉",artist:"I WiSH",mp3:"//p2.music.126.net/hOZJqgJ-So56BqylVfvxRg==/1239149604507799.mp3",},{title:"庭園にて。",artist:"acane_madder",mp3:"//p2.music.126.net/YIxOGdFuDxnwwpQaAp_uEw==/3249056860134895.mp3",},
-',_t('歌曲列表'), _t('格式: {title:"xxx", artist:"xxx", mp3:"http:xxxx"} ，每个歌曲之间用英文,隔开。请保证歌曲列表里至少有一首歌！'));
+'',_t('歌曲列表'), _t('
+<div style="
+    background: #fff;
+    padding: 10px;
+    margin-top: -0.5em;
+">填写格式<p><b>直链方式：</b><br>填写{mp3:"http:xxxx"}多首每个歌曲之间用英文,隔开，单首歌曲的话末尾则不用加逗号。</p>
+<p><b>调用网易云：</b><br>书写网易云歌曲id即可，多首歌曲的话请在两首歌曲id之间加换行，单首歌曲直接写id就行，千万别多加回车换行</p>
+<p><b>注意：</b><br>这两种填写方式不能混合输入，要么只用直链方式，要么只用网易云方式</p>
+<p><b>感谢：</b>https://api.imjad.cn/cloudmusic.md</p>
+</div>
+'));
         $form->addInput($musicList);
     }
     
@@ -42,26 +51,47 @@ if(Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->sxj=='0'){
     }
 
     public static function footer(){
-        $options = Typecho_Widget::widget('Widget_Options')->plugin('YoduBGM'); 
-
+        $options = Typecho_Widget::widget('Widget_Options')->plugin('YoduBGM');  $musicList = $options->musicList;
+ if(empty($musicList)){
+       $musicList = "761323";
+      }
+      
+      if(strpos($musicList,'{mp3')===false){
+        $musicList = str_replace(PHP_EOL, '&br=128000&raw=ture"},{mp3:"//api.imjad.cn/cloudmusic/?type=song&id=', $musicList);  
+  $musicList = '{mp3:"//api.imjad.cn/cloudmusic/?type=song&id='.$musicList.'&br=128000&raw=ture"}';
+   $musicList = str_replace(array("\r\n", "\r", "\n", " "), "", $musicList);   
+         }
+if(strpos($musicList,',')===false){
+    
+		echo '
+<bgm>			
+<a class="ymusic" onclick="playbtu();" target="_blank"><i id="ydmc"></i></a>
+</bgm>
+             ';
+}else{
+      
 		echo '
 <bgm>			
 <a class="ymusic" onclick="playbtu();" target="_blank"><i id="ydmc"></i></a><a class="ymusic" onclick="next();" id="ydnext" target="_blank"><i class="iconfont icon-you"></i></a>
 </bgm>
              ';
-       
+
+}
+      
+
+
+
         echo '<script data-no-instant>
 var yaudio = new Audio();
 yaudio.controls = true;
 var musicArr=[
-              '.$options->musicList.'
+             '.$musicList.'
               ];
+ 
 /*首次随机播放*/
 var a=parseInt(Math.random()*musicArr.length);
 var sj=musicArr[a];
 yaudio.src=sj.mp3;
-yaudio.ti=sj.title;
-yaudio.art=sj.artist;
  ';
 if(Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->bof=='1'){	
 			echo 'yaudio.play();</script>'. "\n";

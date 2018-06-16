@@ -17,8 +17,6 @@ if (a == musicArr.length - 1) {
         }
         var sj = musicArr[a];
         yaudio.src = sj.mp3;
-        yaudio.ti = sj.title;
-        yaudio.art = sj.artist;
         yaudio.play();var autopause=0;
        oyd.className = 'iconfont icon-music';
 }
