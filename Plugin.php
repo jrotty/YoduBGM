@@ -32,9 +32,9 @@ $sxj = new Typecho_Widget_Helper_Form_Element_Radio(
     background: #fff;
     padding: 10px;
     margin-top: -0.5em;
-">填写格式<p><b>直链方式：</b><br>填写歌曲链接地址即可，多首歌曲的话请在两首歌曲之间加换行，千万别多加回车换行。</p>
-<p><b>调用网易云：</b><br>书写网易云歌曲id即可，多首歌曲的话请在两首歌曲id之间加换行，单首歌曲直接写id就行，千万别多加回车换行</p>
-<p><b>注意：</b><br>这两种填写方式不能混合输入，要么只用直链方式，要么只用网易云方式</p>
+"><p><b>直链方式：</b><br>填写歌曲链接地址，必须以 http / https 开头。</p>
+<p><b>网易云音乐：</b><br>填写网易云音乐 ID 即可。</p>
+<p><b>注意：</b><br>多首歌曲链接或 ID 以 回车 分割，一行一条，不要出现空行，不知道什么是歌曲 ID 请自行搜索<br>不支持解析付费歌曲</p>
 <p><b>感谢：</b>https://api.imjad.cn/cloudmusic.md</p>
 </div>
 '));
@@ -56,53 +56,35 @@ if(Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->sxj=='0'){
        $musicList = "761323";
       }
       
-      if(strpos($musicList,'//')===false){
-        $musicList = str_replace(PHP_EOL, '&br=128000&raw=ture"},{mp3:"//api.imjad.cn/cloudmusic/?type=song&id=', $musicList);  
-  $musicList = '{mp3:"//api.imjad.cn/cloudmusic/?type=song&id='.$musicList.'&br=128000&raw=ture"}';
-   $musicList = str_replace(array("\r\n", "\r", "\n", " "), "", $musicList);    
-         }else{
-              $musicList = str_replace(PHP_EOL, '"},{mp3:"', $musicList);  
-  $musicList = '{mp3:"'.$musicList.'"}';
-   $musicList = str_replace(array("\r\n", "\r", "\n", " "), "", $musicList);   
-      
-      }
-if(strpos($musicList,',')===false){
-    
-		echo '
-<bgm>			
-<a class="ymusic" onclick="playbtu();" target="_blank"><i id="ydmc"></i></a>
-</bgm>
-             ';
-}else{
-      
-		echo '
-<bgm>			
-<a class="ymusic" onclick="playbtu();" target="_blank"><i id="ydmc"></i></a><a class="ymusic" onclick="next();" id="ydnext" target="_blank"><i class="iconfont icon-you"></i></a>
-</bgm>
-             ';
-
-}
-      
-
-
+        $array = explode(PHP_EOL,$musicList);
+        foreach ($array as $value) {
+            $value = trim($value);
+            if (substr($value,0,4) === 'http') {
+                $playList .= '{mp3:"'.$value.'"},';
+            }
+            if (is_numeric($value)) {
+                $playList .= '{mp3:"https://api.imjad.cn/cloudmusic/?type=song&id='.$value.'&br=128000&raw=ture"},';
+            }
+            //if (preg_match('/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9a-zA-Z]+$/',$value)) {
+            //    $playList .= '{mp3:"https://www.xxxxxx.com/tool/music/qq.php?id='.$value.'"},';
+            //}
+        }
+        
+        if (count($array) === 1) {
+            echo '<bgm><a class="ymusic" onclick="playbtu();" target="_blank"><i id="ydmc"></i></a></bgm>';
+        } else {
+            echo '<bgm><a class="ymusic" onclick="playbtu();" target="_blank"><i id="ydmc"></i></a><a class="ymusic" onclick="next();" id="ydnext" target="_blank"><i class="iconfont icon-you"></i></a></bgm>';
+        }
 
         echo '<script data-no-instant>
-var yaudio = new Audio();
-yaudio.controls = true;
-var musicArr=[
-             '.$musicList.'
-              ];
- 
-/*首次随机播放*/
-var a=parseInt(Math.random()*musicArr.length);
-var sj=musicArr[a];
-yaudio.src=sj.mp3;
- ';
-if(Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->bof=='1'){	
-			echo 'yaudio.play();</script>'. "\n";
-		}else{	echo '</script>'. "\n";
-}
-        echo '<script  src="'.Helper::options()->pluginUrl . '/YoduBGM/js/player.js" data-no-instant></script><script  src="'.Helper::options()->pluginUrl . '/YoduBGM/js/prbug.js"></script>' . "\n";        
+        var yaudio = new Audio();yaudio.controls = true;var musicArr=['.$playList.'];
+        /*首次随机播放*/
+        var a=parseInt(Math.random()*musicArr.length);var sj=musicArr[a];yaudio.src=sj.mp3;';
+        if (Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->bof == '1') {
+            echo 'yaudio.play();</script>'. "\n";
+        } else {
+            echo '</script>'. "\n";
+        }
+        echo '<script src="'.Helper::options()->pluginUrl . '/YoduBGM/js/player.js" data-no-instant></script>' . "\n";
     }
-
 }
