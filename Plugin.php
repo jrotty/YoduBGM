@@ -34,7 +34,7 @@ $sxj = new Typecho_Widget_Helper_Form_Element_Radio(
     margin-top: -0.5em;
 "><p><b>直链方式：</b><br>填写歌曲链接地址，必须以 http / https 开头。</p>
 <p><b>网易云音乐：</b><br>填写网易云音乐 ID 即可。</p>
-<p><b>注意：</b><br>多首歌曲链接或 ID 以 回车 分割，一行一条，不要出现空行，不知道什么是歌曲 ID 请自行搜索<br>不支持解析付费歌曲</p>
+<p><b>注意：</b><br>多首歌曲以 回车 分割，一行一首，不要出现空行，不知道什么是歌曲 ID 请自行搜索<br>不支持解析付费歌曲</p>
 <p><b>感谢：</b>https://api.imjad.cn/cloudmusic.md</p>
 </div>
 '));
