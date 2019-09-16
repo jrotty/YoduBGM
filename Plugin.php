@@ -4,7 +4,7 @@
  * 
  * @package YoduBGM
  * @author Jrotty
- * @version 1.6.0
+ * @version 1.6.1
  * @link http://qqdie.com/archives/typecho-yodubgm.html
  */
 class YoduBGM_Plugin implements Typecho_Plugin_Interface
