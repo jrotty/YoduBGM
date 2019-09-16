@@ -30,7 +30,6 @@ yaudio.addEventListener('ended', function() {
     next();
 }, false);
 
-
 yaudio.addEventListener("error", function() {
     next();
 }, false);
