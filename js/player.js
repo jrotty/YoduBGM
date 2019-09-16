@@ -34,13 +34,3 @@ yaudio.addEventListener('ended', function() {
 yaudio.addEventListener("error", function() {
     next();
 }, false);
-
-
-/////////////////////////////
-
-var ody = document.getElementById('ydmc');
-if (yaudio.paused) {
-    ody.className = 'iconfont icon-bofang';
-} else {
-    ody.className = 'iconfont icon-music';
-}
