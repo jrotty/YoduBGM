@@ -85,6 +85,6 @@ if(Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->sxj=='0'){
         } else {
             echo '</script>'. "\n";
         }
-        echo '<script src="'.Helper::options()->pluginUrl . '/YoduBGM/js/player.js" data-no-instant></script>' . "\n";
+        echo '<script  src="'.Helper::options()->pluginUrl . '/YoduBGM/js/player.js" data-no-instant></script><script  src="'.Helper::options()->pluginUrl . '/YoduBGM/js/prbug.js"></script>' . "\n"; 
     }
 }
