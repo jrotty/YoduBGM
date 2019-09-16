@@ -1,6 +1,6 @@
-var ody=document.getElementById('ydmc');
+var ody = document.getElementById('ydmc');
 if (yaudio.paused) {
-ody.className = 'iconfont icon-bofang';
+    ody.className = 'iconfont icon-bofang';
 } else {
-ody.className = 'iconfont icon-music';
+    ody.className = 'iconfont icon-music';
 }
