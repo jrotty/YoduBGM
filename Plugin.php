@@ -4,8 +4,8 @@
  * 
  * @package YoduBGM
  * @author Jrotty
- * @version 1.6.5
- * @link http://blog.zezeshe.com/
+ * @version 1.6.6
+ * @link http://blog.zezeshe.com
  */
 class YoduBGM_Plugin implements Typecho_Plugin_Interface
 { 
@@ -17,17 +17,13 @@ class YoduBGM_Plugin implements Typecho_Plugin_Interface
 	/* 禁用插件方法 */
 	public static function deactivate(){}
     public static function config(Typecho_Widget_Helper_Form $form){
-       $bof = new Typecho_Widget_Helper_Form_Element_Radio(
-        'bof', array('0'=> '不自动播放', '1'=> '自动播放'), 0, '播放设置',
-            '自动播放顾名思义，就是页面打开后音乐就会自动播放');
-        $form->addInput($bof);
 $d=array('默认配置');
 $n=5;
 while ($n<=200) {
 $d[$n] = $n.'px';$n=$n+5;
 }
 
-    $set2 = new Typecho_Widget_Helper_Form_Element_Select('top', $d, '8', _t('距离顶部间距'), _t('播放器按钮显示在网页的右上角，这里的设置就是播放器组件距离顶部的间距，默认为65px'));
+    $set2 = new Typecho_Widget_Helper_Form_Element_Select('top', $d, NULL, _t('距离顶部间距'), _t('播放器按钮显示在网页的右上角，这里的设置就是播放器组件距离顶部的间距，默认为65px'));
     $form->addInput($set2);
 
 $sxj = new Typecho_Widget_Helper_Form_Element_Radio(
@@ -107,11 +103,7 @@ var musicArr=[
 var a=parseInt(Math.random()*musicArr.length);
 var sj=musicArr[a];
 yaudio.src=sj.mp3;
- ';
-if(Typecho_Widget::widget('Widget_Options')->Plugin('YoduBGM')->bof=='1'){	
-			echo 'yaudio.play();</script>'. "\n";
-		}else{	echo '</script>'. "\n";
-}
+</script>'. "\n";
         echo '<script  src="'.Helper::options()->pluginUrl . '/YoduBGM/js/player.js" data-no-instant></script><script  src="'.Helper::options()->pluginUrl . '/YoduBGM/js/prbug.js"></script>' . "\n";        
     }
 
