@@ -11,6 +11,7 @@ bgm {
     position: fixed;
     right: 5px;
     top: 65px;
+    z-index: 1000;
 }
 bgm a {
     display: flex;
